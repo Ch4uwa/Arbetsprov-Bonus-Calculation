@@ -1,0 +1,42 @@
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Skapa ny konsult
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="inputForm" class="mb-3">
+          <label class="form-label">
+            Förnamn
+            <input formControlName="firstName" class="form-control" />
+          </label>
+          <label class="form-label">
+            Efternamn
+            <input type="text" formControlName="lastName" class="form-control" />
+          </label>
+          <label class="form-label">Anställningsdatum
+            <input type="date" formControlName="startDate" class="form-control" />
+          </label>
+        </form>
+        <div class="modal-footer">
+          <button [disabled]="inputForm.invalid" type="button" class="btn myBtn myBtnSubmit" *ngIf="showBtn"
+            (click)="onAdd()" data-bs-dismiss="modal">
+            Spara konsult
+          </button>
+          <button [disabled]="inputForm.invalid" type="button" class="btn myBtn myBtnSubmit" *ngIf="!showBtn"
+            (click)="onUpdate()" data-bs-dismiss="modal">
+            Uppdatera konsult
+          </button>
+          <button type="button" class="btn myBtn myBtnCancel cancel" data-bs-dismiss="modal">
+            Stäng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

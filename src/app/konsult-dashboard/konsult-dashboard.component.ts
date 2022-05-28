@@ -1,102 +1,89 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms'
-import { KonsultModel } from './konsult-dashboard.model';
 import { ApiService } from '../shared/api.service';
+import { IConsult } from '../shared/interfaces';
+import { Subject, takeUntil } from 'rxjs';
+import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
 
 @Component({
-  selector: 'konsult-dashboard',
-  templateUrl: './konsult-dashboard.component.html',
-  styleUrls: ['./konsult-dashboard.component.css']
+    selector: 'konsult-dashboard',
+    templateUrl: './konsult-dashboard.component.html',
+    styleUrls: ['./konsult-dashboard.component.css'],
 })
-export class KonsultDashboardComponent implements OnInit {
+export class KonsultDashboardComponent implements OnInit, OnDestroy {
+    private _unSubscribe: Subject<void> = new Subject();
 
-  formValue!: FormGroup;
-  konsultModelObj: KonsultModel = new KonsultModel();
-  konsulterData!: any[];
-  showLTBtn!: boolean;
-  showUDBtn!: boolean;
-  constructor(private router: Router, private formbuilder: FormBuilder, private api : ApiService) { }
+    consults: IConsult[] = [];
+    consultEdit!: IConsult;
+    isShowAdd = true;
 
-  ngOnInit(): void {
-   
-    this.formValue = this.formbuilder.group({
-      id : [''],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      startingDate: Date,
-      debHours : [''],
-    })
-    this.getAllKonsulter();
-  }
-  // Hide Lägg till button method
-  clickAddKonsult() {
-    this.formValue.reset();
-    this.showLTBtn = true;
-    this.showUDBtn = false;
-  }
-  
-  // POST konsult method
-  postKonsultDetails() {
-    this.konsultModelObj.firstName = this.formValue.value.firstName;
-    this.konsultModelObj.lastName = this.formValue.value.lastName;
-    this.konsultModelObj.startingDate = this.formValue.value.startingDate;
+    constructor(private router: Router, private api: ApiService) {}
 
-    this.api.postKonsult(this.konsultModelObj)
-      .subscribe(res=> {
-        //alert("Konsulten är nu tillagd!")
-        // ångra knappen, ångra referensen 
-        let ref = document.getElementById('cancel')
-        ref?.click();
-        // reset form
-        this.formValue.reset();
-        this.getAllKonsulter();
-      },
-      err => {
-        alert("Något gick fel, konsulten är ej tillagd!")
-      })
-  }
-  // GET konsult method
-  getAllKonsulter() {
-    this.api.getKunsult()
-      .subscribe(res => {
-        this.konsulterData = res;
-      })
-  }
-  //DELETE konsult
-  deleteKonsult(row: any) {
-    console.log(`delete ${row.id}`);
-    this.api.deleteKunsult(row.id)
-      .subscribe(res => {
-        //alert("Konsulten är raderad!");
-        this.getAllKonsulter();
-      })
-  }
-  //EDIT konsult
-  onEdit(row: any) {
-    this.showLTBtn = false;
-    this.showUDBtn = true;
+    ngOnInit(): void {
+        this.getAllConsult();
+    }
 
-    this.konsultModelObj.id = row.id;
+    ngOnDestroy(): void {
+        this._unSubscribe.next();
+        this._unSubscribe.complete();
+    }
 
-    this.formValue.controls['firstName'].setValue(row.firstName);
-    this.formValue.controls['lastName'].setValue(row.lastName);
-    this.formValue.controls['startingDate'].setValue(row.startingDate);
-  }
-  updateKonsultDetails() {
-    this.konsultModelObj.firstName = this.formValue.value.firstName;
-    this.konsultModelObj.lastName = this.formValue.value.lastName;
-    this.konsultModelObj.startingDate = this.formValue.value.startingDate;
+    getAllConsult() {
+        this.api
+            .getAllConsults()
+            .pipe(takeUntil(this._unSubscribe))
+            .subscribe((resp) => {
+                if (resp) {
+                    this.consults = resp;
+                }
+            });
+    }
 
-    this.api.updateKunsult(this.konsultModelObj, this.konsultModelObj.id)
-      .subscribe(res => {
-        //alert("Konsulten är uppdaterad!");
-        let ref = document.getElementById('cancel')
-        ref?.click();
-       this.formValue.reset();
-        this.getAllKonsulter();
-      })
-  }
+    /**
+     * Add new cunsultant
+     */
+    addNewConsult(data: IConsult) {
+        this.api
+            .addConsult(data)
+            .pipe(takeUntil(this._unSubscribe))
+            .subscribe((s) => {
+                this.consults.push(s);
+                return s;
+            });
+    }
+
+    /**
+     * Delete consultant
+     */
+    removeConsult(id?: number) {
+        if (id) {
+            this.api
+                .removeConsult(id)
+                .pipe(takeUntil(this._unSubscribe))
+                .subscribe(
+                    () =>
+                        (this.consults = this.consults.filter(
+                            (c) => c.id !== id
+                        ))
+                );
+        }
+    }
+
+    /**
+     * Edit consultant
+     */
+    onEdit(consult: IConsult) {
+        this.consultEdit = consult;
+    }
+
+    updateConsult(consult: IConsult) {
+        this.api
+            .updateConsult(consult)
+            .pipe(takeUntil(this._unSubscribe))
+            .subscribe((s) => {
+                const idx = this.consults.findIndex(c => c.id === s.id);
+                this.consults[idx] = consult;
+                return s;
+            });
+    }
 }
-
-

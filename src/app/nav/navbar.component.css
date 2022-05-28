@@ -1,3 +1,23 @@
-li > a.active {
-  color: red;
+.topnav {
+  background-color: var(--gisys-green);
+  overflow: hidden;
+  text-align: center;
+}
+
+.topnav a {
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 14px 16px;
+  float: right;
+}
+
+.topnav a:first-child {
+  float: left;
+  color: white;
+}
+
+.topnav a:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
 }

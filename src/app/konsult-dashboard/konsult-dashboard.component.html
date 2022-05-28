@@ -1,100 +1,86 @@
 <!-- Button trigger modal -->
-<button (click)="clickAddKonsult()" class="btn myBtn myBtnCreate mt-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button class="btn myBtn myBtnCreate mt-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+  (click)="isShowAdd = true">
   Skapa ny konsult
 </button>
 
 <table class="table myTable mt-3">
   <thead>
     <tr>
-      <th class="col konsultContent  centerText">Id</th>
-      <th class="col konsultContent  centerText">Förnamn</th>
-      <th class="col konsultContent  centerText">Efternamn</th>
-      <th class="col konsultContent  centerText">Startdatum</th>
-      <th class="col konsultContent  centerText">Ändra/radera konsult</th>
+      <th class="col konsultContent centerText">Id</th>
+      <th class="col konsultContent centerText">Förnamn</th>
+      <th class="col konsultContent centerText">Efternamn</th>
+      <th class="col konsultContent centerText">Startdatum</th>
+      <th class="col konsultContent centerText">Ändra/radera konsult</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of konsulterData!">
-      <td class="centerText">{{row.id}}</td>
-      <td class="centerText">{{row.firstName}}</td>
-      <td class="centerText">{{row.lastName}}</td>
-      <td class="centerText">{{row?.startingDate | date: 'yyyy-MM-dd'}}</td>
-      <td class="col konsultContent centerText">
-        <button class="btn btn-success myBtn me-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onEdit(row)">Uppdatera</button>
-        |
-        <button class="btn btn-danger myBtn ms-3 me-3 " (click)="deleteKonsult(row)">Radera</button>
-      </td>
-    </tr>
+      <tr *ngFor="let consult of consults">
+        <td class="centerText">{{ consult.id }}</td>
+        <td class="centerText">{{ consult.firstName }}</td>
+        <td class="centerText">{{ consult.lastName }}</td>
+        <td class="centerText">{{ consult.startDate }}</td>
+        <td class="col konsultContent centerText">
+          <button class="btn btn-success myBtn me-3" type="button" data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop" (click)="onEdit(consult); isShowAdd=false">
+            Uppdatera
+          </button>
+          |
+          <button class="btn btn-danger myBtn ms-3 me-3" (click)="removeConsult(consult.id)">
+            Radera
+          </button>
+        </td>
+      </tr>
   </tbody>
 </table>
 
-
-
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Skapa ny konsult</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="formValue">
-          <div class="mb-3">
-            <label for="createConsultantModal" class="form-label">Förnamn</label>
-            <input type="text" formControlName="firstName" class="form-control" id="createConsultantModal">
-          </div>
-          <div class="mb-3">
-            <label for="createConsultantModal" class="form-label">Efternamn</label>
-            <input type="text" formControlName="lastName" class="form-control" id="createConsultantModal">
-          </div>
-          <div class="mb-3">
-            <label for="createConsultantModal" class="form-label">Anställningsdatum</label>
-            <input type="date" formControlName="startingDate" class="form-control" id="createConsultantModal">
-          </div>
-        </form>
-        <div class="modal-footer">
-          <button type="button" class="btn myBtn myBtnSubmit" *ngIf="showLTBtn" (click)="postKonsultDetails()">Spara konsult</button>
-          <button type="button" class="btn myBtn myBtnSubmit" *ngIf="showUDBtn" (click)="updateKonsultDetails()">Uppdatera konsult</button>
-          <button type="button" id="cancel" class="btn myBtn myBtnCancel" data-bs-dismiss="modal">Ångra</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-add-new-dialog (add)="addNewConsult($event)" [consultToEdit]="consultEdit" (update)="updateConsult($event)" [showBtn]="isShowAdd"></app-add-new-dialog>
 
-<!-- Modal bonus-->
-<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Modal bonus -->
+<!--
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabelBonus" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Beräkna konsultbonus</h5>
+        <h5 class="modal-title" id="staticBackdropLabelBonus">
+          Beräkna konsultbonus
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="formValue">
+        <form [formGroup]="consultForm">
           <div class="mb-3">
-            <label for="bonusCalculationModal" class="form-label">Debiterade timmar</label>
-            <input type="number" formControlName="firstName" class="form-control" id="bonusCalculationModal">
+            <label class="form-label">Debiterade timmar
+              <input type="number" formControlName="firstName" class="form-control" />
+            </label>
           </div>
           <div class="mb-3">
-            <label for="bonusCalculationModal" class="form-label">Årets nettoresultat</label>
-            <input type="number" formControlName="lastName" class="form-control" id="bonusCalculationModal">
+            <label class="form-label">Årets nettoresultat
+              <input type="number" formControlName="lastName" class="form-control" />
+            </label>
           </div>
           <div class="mb-3">
-            <label for="bonusCalculationModal" class="form-label">Bonus %</label>
-            <input type="number" formControlName="bonusPercent" class="form-control" id="bonusCalculationModal">
+            <label class="form-label">Bonus %
+              <input type="number" formControlName="bonusPercent" class="form-control" />
+            </label>
           </div>
           <div class="mb-3">
-            <label for="bonusCalculationModal" class="form-label">Bonus kr</label>
-            <input type="number" formControlName="BonusSEK" class="form-control" id="bonusCalculationModal" >
+            <label class="form-label">Bonus kr
+              <input type="number" formControlName="BonusSEK" class="form-control" />
+            </label>
           </div>
         </form>
         <div class="modal-footer">
-          <button type="button" class="btn myBtn myBtnCreate">Beräkna</button>
-          <button type="button" id="cancel" class="btn myBtn myBtnCancel" data-bs-dismiss="modal">Ångra</button>
+          <button type="button" class="btn myBtn myBtnCreate">
+            Beräkna
+          </button>
+          <button type="button" class="btn myBtn myBtnCancel cancel" data-bs-dismiss="modal">
+            Ångra
+          </button>
         </div>
       </div>
     </div>
   </div>
-</div>
+</div> -->

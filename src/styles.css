@@ -1,101 +1,87 @@
-a:hover {
-  color: #000 !important;
-}
-.hourInput {
-  width: 40% !important;
-  text-align: center;
-  background-color: #2ABB9B !important;
-  color: white !important;
-  font-weight: 700 !important;
-}
-.colorGisys {
-  background-color: #2abb9b!important;
-  color: white !important;
-}
-/* -----Navbar and link styles----- */
-.myNavbar {
-  background-color: #2ABB9B;
+:root {
+  --gisys-green: #2abb9b;
+  --gisys-secondary-green: #4ab7a1;
 }
 
-.navbar-brand {
+a:hover {
+  color: #000;
+}
+.hourInput {
+  width: 40%;
+  text-align: center;
+  background-color: var(--gisys-green);
+  color: white;
+  font-weight: 700;
+}
+.colorGisys {
+  background-color: var(--gisys-green);
   color: white;
 }
 
-.nav-link,
-.navbar-nav {
-  color: black !important;
-}
-
-.nav-link,
-.navbar-brand {
-  cursor: pointer;
-}
-.debHours {
-  font-weight: 700;
+.centerText {
   text-align: center;
 }
-.centerText {
-    text-align: center;
-}
 .nettoResultatBox {
-    width: 90% !important;
-    text-transform: uppercase;
+  width: 90%;
+  text-transform: uppercase;
 }
 .myBoldText {
-    font-weight: 700;
+  font-weight: 700;
 }
+
 /* -----My Button styles----- */
-.myBtn {
+/* #region Btn*/
+button.myBtn {
   color: #fff;
-  background-color: #4ab7a1;
-  border-color: #4ab7a1;
+  background-color: var(--gisys-secondary-green);
+  border-color: var(--gisys-secondary-green);
   border-radius: 0;
   text-transform: uppercase;
   font-size: 12px;
 }
 
-.myBtnEdit,
-.myBtnDelete {
+button.myBtnEdit,
+button.myBtnDelete {
   background-color: transparent;
   border-color: transparent;
   padding: 0;
 }
 
-.myBtnEdit {
-  color: #4ab7a1;
+button.myBtnEdit {
+  color: var(--gisys-secondary-green);
 }
-.myBtnSave {
+button.myBtnSave {
   color: lawngreen;
 }
-.myBtnDelete {
+button.myBtnDelete {
   color: red;
 }
-.myBtnSubmit {
-  background-color: #2abb9b !important;
+button.myBtnSubmit {
+  background-color: var(--gisys-green);
 }
-.myBtnCreate {
-  background-color: orange !important;
+button.myBtnCreate {
+  background-color: orange;
 }
-.myBtnCancel {
-    background-color: gray !important;
-    color: white !important;
+button.myBtnCancel {
+  background-color: gray;
+  color: white;
 }
-.myBtnBack {
-  background-color: lightgray !important;
+button.myBtnBack {
+  background-color: lightgray;
 }
-.myBtnHome {
-  border: 1px solid black !important;
+button.myBtnHome {
+  border: 1px solid black;
 }
-.myCalculateBonus {
-  background-color: #2abb9b !important;
-  color: white !important;
+button.myCalculateBonus {
+  background-color: var(--gisys-green);
+  color: white;
   margin-right: 6px;
 }
 .btnRight {
-    text-align: right !important;
+  text-align: right;
 }
 .debHours {
   font-weight: 700;
   text-align: center;
 }
-
+/* #endregion btn*/

@@ -1,0 +1,56 @@
+{
+  "consult": [
+    {
+      "id": 1,
+      "firstName": "Mark",
+      "lastName": "Tras",
+      "startDate": "2020-02-12",
+      "workedHours": 22
+    },
+    {
+      "id": 2,
+      "firstName": "Rick",
+      "lastName": "Eps",
+      "startDate": "2022-10-02",
+      "workedHours": 103
+    },
+    {
+      "id": 3,
+      "firstName": "Ana",
+      "lastName": "dd",
+      "startDate": "2022-05-05"
+    },
+    {
+      "id": 4,
+      "firstName": "Nils",
+      "lastName": "Pyssling",
+      "startDate": "2022-05-20"
+    },
+    {
+      "id": 5,
+      "firstName": "Pepp",
+      "lastName": "Juqq",
+      "startDate": "2022-05-05"
+    },
+    {
+      "firstName": "Anawa",
+      "lastName": "derr",
+      "startDate": "2022-05-05",
+      "id": 6
+    },
+    {
+      "firstName": "Tilly",
+      "lastName": "Bob",
+      "startDate": "2022-04-02",
+      "id": 7
+    },
+    {
+      "firstName": "Jyf",
+      "lastName": "Frans",
+      "startDate": "2022-04-28",
+      "lojBonus": 0,
+      "workedHours": 0,
+      "id": 9
+    }
+  ]
+}

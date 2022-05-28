@@ -8,22 +8,30 @@
 
 <div class="row justify-content-start">
   <div class="col-4">
-    <div class="input-group mb-3 nettoResultatBox">
+    <div class="input-group mb-3 nettoResultatBox" [formGroup]="consultForm">
       <span class="input-group-text colorGisys">Ange Nettoresultat:</span>
-      <input type="text" #box (keyup)="getNettoResultatInput(box.value)" name="nettoResultatInput" class="form-control" aria-label="Ange Netto resultat">
+      <input type="number" #box name="nettoResultatInput" class="form-control"
+        aria-label="Ange Netto resultat" formControlName="netResult" />
     </div>
   </div>
   <div class="col-3">
-    <p>Netto resultat: <span class="myBoldText">{{displayNetResult | number}} kr</span></p>
+    <p>
+      Netto resultat:
+      <span class="myBoldText">{{box.value}} kr</span>
+    </p>
   </div>
   <div class="col-2">
-    <p>Bonuspott: <span class="myBoldText">{{bonusPott | number}} kr</span></p>
+    <p>
+      Bonuspott: <span class="myBoldText"> kr</span>
+    </p>
   </div>
   <div class="col-3">
-    <p>Totala bonus timmar: <span class="myBoldText">{{totalBonusHours}} tim</span></p>
+    <p>
+      Totala bonus timmar:
+      <span class="myBoldText"> tim</span>
+    </p>
   </div>
 </div>
-
 
 <table class="table myTable mt-3">
   <thead>
@@ -40,18 +48,21 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of konsulterData">
-      <td class="centerText">{{row.id}}</td>
-      <td class="">{{row.firstName}}</td>
-      <td class="">{{row.lastName}}</td>
-      <td class="centerText">{{row?.startingDate | date: 'yyyy-MM-dd'}}</td>
-      <td class="centerText">{{row?.debHours}} tim</td>
-      <td class="debHours">{{calculateLojaltyFactor(row?.startingDate)}}x</td>
-      <td class="debHours">{{calculateEmploymentDays(row?.startingDate) * row.debHours}} tim</td>
-      <td class="debHours">{{calculateBonusPercent(row?.debHours)}}</td>
-      <td class="debHours">{{calculateConsultantBonus(row?.debHours)}} kr</td>
+    <tr *ngFor="let consult of consultsData; let idx = index">
+      <td class="centerText">{{ consult.id }}</td>
+      <td>{{ consult.firstName }}</td>
+      <td>{{ consult.lastName }}</td>
+      <td class="centerText">{{ consult.startDate }}</td>
+      <td class="centerText">{{ consult.workedHours }} tim</td>
+      <td class="debHours">{{ consult.lojBonus }}</td>
+      <td class="debHours"> tim</td>
+      <td class="debHours">hejja</td>
+      <td class="debHours">hej kr</td>
       <td class="btnRight">
-        <button class="btn myBtn myBtnCreate ms-3" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" (click)="onEdit(row)">Lägg till timmar</button>
+        <button class="btn myBtn myBtnCreate ms-3" type="button" data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop2" (click)="onEdit(idx)">
+          Lägg till timmar
+        </button>
       </td>
     </tr>
   </tbody>
@@ -62,28 +73,35 @@
   </div>
 </div>-->
 
-
-
-  <!--Modal bonus-->
-  <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Beräkna konsultbonus</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="formValue">
-            <div class="mb-3">
-              <label for="bonusCalculationModal" class="form-label">Debiterade timmar</label>
-              <input type="number" formControlName="debHours" class="form-control" id="bonusCalculationModal">
-            </div>
-          </form>
-          <div class="modal-footer">
-            <button type="button" class="btn myBtn myBtnCreate" (click)="updateKonsultDetails()">Spara timmar</button>
-            <button type="button" id="cancel" class="btn myBtn myBtnCancel" data-bs-dismiss="modal">Ångra</button>
+<!--Modal bonus-->
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          Beräkna konsultbonus
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="consultForm">
+          <div class="mb-3">
+            <label class="form-label">
+              Debiterade timmar
+              <input type="number" formControlName="workedHours" class="form-control" />
+            </label>
           </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn myBtn myBtnCreate" (click)="addHours()">
+            Spara timmar
+          </button>
+          <button type="button" id="cancel" class="btn myBtn myBtnCancel" data-bs-dismiss="modal">
+            Ångra
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>

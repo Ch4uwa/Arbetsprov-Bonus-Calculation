@@ -1,21 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'startsida',
-  templateUrl: './startsida.component.html',
-  styleUrls: ['./startsida.component.css']
+    selector: 'startsida',
+    templateUrl: './startsida.component.html',
+    styleUrls: ['./startsida.component.css']
 })
-export class StartsidaComponent implements OnInit {
+export class StartsidaComponent {
 
-  constructor(private router: Router) { }
+    constructor(private router: Router) { }
 
-  goToPage(pageName: string): void {
-    this.router.navigate([`${pageName}`]);
-  }
-
-  ngOnInit(): void {
-  }
-
+    goToPage(pageName: string): void {
+        this.router.navigate([`${pageName}`]);
+    }
 }
